@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404, render, redirect
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-from .models import Course, Submission, Choice, Enrollment
+from .models import Course, Submission, Choice, Enrollment, Question
 
 def submit(request, course_id):
     course = get_object_or_404(Course, pk=course_id)
@@ -27,11 +27,22 @@ def show_exam_result(request, course_id, submission_id):
     course = get_object_or_404(Course, pk=course_id)
     submission = Submission.objects.get(pk=submission_id)
     choices = submission.choices.all()
+    
+    # حساب مجموع الدرجات لكل الأسئلة في الكورس (الـ possible)
+    total_possible = 0
+    questions = course.question_set.all()
+    for question in questions:
+        total_possible += question.grade
+
+    # حساب درجات إجابات الطالب الصحيحة (الـ grade)
     total_score = 0
     for choice in choices:
         if choice.is_correct:
             total_score += choice.question.grade
+
     context['course'] = course
+    context['submission'] = submission
     context['grade'] = total_score
+    context['possible'] = total_possible
     context['choices'] = choices
     return render(request, 'onlinecourse/exam_result_bootstrap.html', context)
