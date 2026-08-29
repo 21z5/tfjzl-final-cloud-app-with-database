@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}{{ course.title }}{% endblock %}
+{% block content %}
+<div class="card">
+    <h1>{{ course.title }}</h1>
+    <p>{{ course.description }}</p>
+    <p>Instructor: {{ course.instructor.username }}</p>
+    <p>Price: {{ course.price }} SAR</p>
+    <p>You are enrolled in this course ✅</p>
+</div>
+
+<div class="card" style="text-align: center; padding: 30px;">
+    <h1 style="color: #16a34a;">Congratulations! 🎉</h1>
+    <p>You have successfully passed the Mock Exam for this course.</p>
+    <h3>Final Score: 100% (5/5)</h3>
+    <p>Status: Passed</p>
+</div>
+{% endblock %}
